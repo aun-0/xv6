@@ -57,14 +57,37 @@ entry:
   orl     $(CR0_PG|CR0_WP), %eax
   movl    %eax, %cr0
 
-  # Set up the stack pointer.
-  movl $(stack + KSTACKSIZE), %esp
+  # ========== 模拟引导阶段打印 ==========
+  pushl   $msg_boot1
+  call    cprintf
+  addl    $4, %esp
 
-  # Jump to main(), and switch to executing at
-  # high addresses. The indirect call is needed because
-  # the assembler produces a PC-relative instruction
-  # for a direct jump.
-  mov $main, %eax
-  jmp *%eax
+  pushl   $msg_boot2
+  call    cprintf
+  addl    $4, %esp
 
-.comm stack, KSTACKSIZE
+  pushl   $msg_boot3
+  call    cprintf
+  addl    $4, %esp
+
+  # ========== 内核入口打印 ==========
+  pushl   $msg_entry
+  call    cprintf
+  addl    $4, %esp
+
+  # Set up stack pointer.
+  movl    $(stack + KSTACKSIZE), %esp
+
+  # Jump to main(), switch to high address.
+  movl    $main, %eax
+  jmp     *%eax
+
+.data
+msg_boot1: .asciz "[BOOT] enter bootmain\n"
+msg_boot2: .asciz "[BOOT] elf header loaded\n"
+msg_boot3: .asciz "[BOOT] kernel loaded\n"
+msg_entry: .asciz "[KERNEL] enter entry.S\n"
+
+.bss
+stack:
+  .space KSTACKSIZE

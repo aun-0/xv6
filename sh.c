@@ -3,7 +3,7 @@
 #include "types.h"
 #include "user.h"
 #include "fcntl.h"
-
+#include <stddef.h>
 // Parsed command representation
 #define EXEC  1
 #define REDIR 2
@@ -86,7 +86,9 @@ runcmd(struct cmd *cmd)
       printf(2, "open %s failed\n", rcmd->file);
       exit();
     }
+    if (rcmd->cmd != NULL) {
     runcmd(rcmd->cmd);
+}
     break;
 
   case LIST:
