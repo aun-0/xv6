@@ -13,7 +13,8 @@
 #define SECTSIZE  512
 
 void readseg(uchar*, uint, uint);
-
+// bootmain是xv6启动流程中第一个执行的C语言函数
+// 被boot/bootasm.S中的start32函数调用，运行在32位保护模式下
 void
 bootmain(void)
 {

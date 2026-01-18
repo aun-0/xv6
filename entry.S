@@ -1,7 +1,9 @@
 # The xv6 kernel starts executing in this file. This file is linked with
 # the kernel C code, so it can refer to kernel symbols such as main().
 # The boot block (bootasm.S and bootmain.c) jumps to entry below.
-        
+# entry.S -- 内核的入口程序，bootmain加载内核后跳转至此
+# 核心功能：初始化内核栈、开启分页、清零BSS段、调用内核main函数
+# 运行环境：32位保护模式，关闭中断，页表未开启，物理地址直接访问        
 # Multiboot header, for multiboot boot loaders like GNU Grub.
 # http://www.gnu.org/software/grub/manual/multiboot/multiboot.html
 #
